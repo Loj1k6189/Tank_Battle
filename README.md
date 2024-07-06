@@ -1,0 +1,1 @@
+This is a simple tank game. You can use and play it as you wish. But DO NOT use it for commercial purposes.
