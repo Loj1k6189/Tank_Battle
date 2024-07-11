@@ -1,35 +1,67 @@
-                                                            //Tank生命脚本//
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Tank_health : MonoBehaviour{
+public class Tank_health : MonoBehaviour
+{
+    public int hp = 100;
+    public GameObject tankExplosion;
+    public AudioClip tankExplosionAudio;
+    public Slider hpSlider;
 
-    //开放参数接口
-    public int hp = 100;                  //血量
-    public GameObject tankExplosion;      //爆炸效果
-    public AudioClip tankExplosionAudio;  //爆炸音乐
-    public Slider hpSlider;               //生命血条
+    public GameObject gameOverPanel;
 
-    //私有变量
-    private int hpTotal;
+    private int hptotal;
+    private static int enemy_score=0;
+    [SerializeField] private Text enemy_score_text;
 
-    //初始化血条量
-    void Start(){
-        hpTotal = hp;
+    // Start is called before the first frame update
+    void Start()
+    {
+        hptotal = hp;
+        gameOverPanel.SetActive(false);
     }
 
-    //接收子弹碰撞信息，扣除血量
-    void TankDamage(){
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void hp_recover()
+    {
+        if (hp <= 50)
+        {
+            hp = hp + 50;
+        }
+        if (hp > 50)
+        { 
+            hp = 100;
+        }
+        hpSlider.value = (float)hp / hptotal;
+    }
+
+    void TakeDamage()
+    {
         if (hp <= 0)
+        {
             return;
+        }
         hp -= Random.Range(10, 20);
-        hpSlider.value = (float)hp / hpTotal;
-        if (hp <= 0){
+        hpSlider.value = (float)hp / hptotal;
+        if (hp <= 0)
+        {
             AudioSource.PlayClipAtPoint(tankExplosionAudio, transform.position);
             GameObject.Instantiate(tankExplosion, transform.position + Vector3.up, transform.rotation);
             GameObject.Destroy(this.gameObject);
+            if (this.tag == "Tank")
+            {
+                enemy_score+=100;
+                Debug.Log("SCORES:" + enemy_score);
+                enemy_score_text.text = "SCORES:" + enemy_score;
+            }
+            gameOverPanel.SetActive(true);
         }
     }
 }
