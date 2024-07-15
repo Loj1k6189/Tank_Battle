@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class S_GradeBoard : MonoBehaviour
 {
     private const string FILE_NAME = "Single_Level1_Grade.txt";
-    private string ID = "FOUNDSJJ";
+    private string ID;
 
     [SerializeField] private Text ScoreBoard;
     [SerializeField] private Text IDBoard;
 
+
     void Start()
     {
+        ID = PlayerPrefs.GetString("username", "111");
         IDBoard.text = "ID : " + ID;
     }
 
